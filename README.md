@@ -29,6 +29,8 @@ Install the required Python packages:
 pip install -r requirements.txt
 ```
 
+or you can do it the old-fashioned way:
+
 ```bash
 pip install netmiko xmltodict tabulate pan-python dynaconf
 ```
@@ -37,14 +39,15 @@ Clone this repository or download the script to your local machine.
 
 ## Configuration
 
-Before running the script, configure the config.py file with the appropriate settings for your Panorama appliance, including hostname, username, and password.
+[optional]
+Before running the script, configure the `settings.yaml` file with the appropriate settings for your Panorama appliance, including hostname, username, and password. If you don't want to do this, you can simply pass the parameters at runtime.
 
 Usage
 
 Run the script with the following command, optionally specifying parameters for hostname, username, password, and debug mode:
 
 ```bash
-python panorama_script.py --hostname [hostname] --username [username] --password [password] --debug
+python app.py --hostname [hostname] --username [username] --password [password] --debug
 ```
 
 ## Script Functions
