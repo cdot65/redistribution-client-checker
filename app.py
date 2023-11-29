@@ -12,6 +12,7 @@ from tabulate import tabulate
 from panos.errors import PanDeviceError
 from panos.firewall import Firewall
 from panos.panorama import Panorama
+from config import settings
 
 # Set up argument parser
 parser = argparse.ArgumentParser(
@@ -24,14 +25,17 @@ parser.add_argument(
 )
 parser.add_argument(
     "--hostname",
+    default=settings["panorama"]["hostname"],
     help="Hostname of the Panorama appliance",
 )
 parser.add_argument(
     "--username",
+    default=settings["panorama"]["username"],
     help="Username for the Panorama appliance",
 )
 parser.add_argument(
     "--password",
+    default=settings["panorama"]["password"],
     help="Password for the Panorama appliance",
 )
 args = parser.parse_args()
@@ -166,10 +170,16 @@ if __name__ == "__main__":
         list_of_redist_clients = parse_xml_response(redist_clients)
         logging.debug(f"list_of_redist_clients: {list_of_redist_clients}")
 
-        # loop through each firewall and add to pan.children
-        for each in list_of_redist_clients["response"]["result"]["entry"]:
-            firewall = Firewall(serial=each["host"])
+        # check to see if the response returns a single entry or a list of entries
+        if isinstance(list_of_redist_clients["response"]["result"]["entry"], dict):
+            firewall = Firewall(
+                serial=list_of_redist_clients["response"]["result"]["entry"]["host"]
+            )
             pan.add(firewall)
+        else:
+            for each in list_of_redist_clients["response"]["result"]["entry"]:
+                firewall = Firewall(serial=each["host"])
+                pan.add(firewall)
 
         # debug
         logging.debug(pan.children)
