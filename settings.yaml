@@ -1,1 +1,4 @@
---- {}
+panorama:
+  hostname: "panorama ip "
+  username: "username goes here"
+  password: "password goes here"
